@@ -10,7 +10,9 @@ import android.Manifest;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -26,13 +28,14 @@ public class MainActivity extends AppCompatActivity {
 
     Button btnNorth, btnEast, btnCentral;
     private GoogleMap map;
+    Spinner spinnerLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        map = findViewById(R.id.map);
+        spinnerLocation = findViewById(R.id.spinner);
         FragmentManager fm = getSupportFragmentManager();
         SupportMapFragment mapFragment = (SupportMapFragment)
                 fm.findFragmentById(R.id.map);
@@ -102,19 +105,39 @@ public class MainActivity extends AppCompatActivity {
                 btnEast = findViewById(R.id.btnEast);
                 btnCentral = findViewById(R.id.btnCentral);
 
-                btnNorth.setOnClickListener(new View.OnClickListener() {
+                spinnerLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onClick(View v) {
-                        if (map != null) {
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        if(i == 0){
+                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(poi_north,
+                                    15));
+                        } else if(i == 1) {
+                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(poi_central,
+                                    15));
+                        } else if(i == 2) {
+                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(poi_east,
+                                    15));
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+                        btnNorth.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (map != null) {
 //                    map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 //                    map.animateCamera(CameraUpdateFactory.zoomIn());
 //                    map.animateCamera(CameraUpdateFactory.zoomOut());
-                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(poi_north,
-                                    15));
+                                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(poi_north,
+                                            15));
 
-                        }
-                    }
-                });
+                                }
+                            }
+                        });
 
                 btnCentral.setOnClickListener(new View.OnClickListener() {
                     @Override
